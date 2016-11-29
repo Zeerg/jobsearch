@@ -5,7 +5,7 @@ import json
 import urllib2
 import feedparser
 import datetime as dt
-#testing
+
 #Setup date variables
 today = dt.date.today()
 two_weeks_ago = today - dt.timedelta(days=14)
@@ -15,6 +15,7 @@ url = {'remoteok': "https://remoteok.io/index.json?description=&location=Remote&
        'stackrss': "http://stackoverflow.com/jobs/feed?r=True&tl=sysadmin+",
        'weworkremotely': "https://weworkremotely.com/categories/6-devops-sysadmin/jobs.rss",
        'remotebase': "http://api.remotebase.io/companies?is_hiring=true&hiring_regions=United%20States",
+       'indeed': "http://rss.indeed.com/rss?q=Linux&l=Remote&sort=date",
        }
 #remoteok api
 open_remote_ok = urllib2.urlopen(url['remoteok'])
