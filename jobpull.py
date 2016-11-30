@@ -31,6 +31,9 @@ url_stack = feedparser.parse(url['stackrss'])
 #we work remotely rss
 url_wework = feedparser.parse(url['weworkremotely'])
 
+#indeed rss
+url_indeed = feedparser.parse(url['indeed'])
+
 #Remote Ok Function
 def remoteokcall():
 
@@ -43,19 +46,6 @@ def remoteokcall():
             print 'Apply Here: ', item['url'] + '\n'
 
 remoteokcall()
-
-#Remote Base Function
-
-def remotebasecall():
-
-    print "Possibilities From RemoteBase"
-    print "================================="
-    for item in remote_base_result['companies']:
-        if item['updated_at'] or item['created_at'] > two_weeks_ago.isoformat():
-            print 'Company Name:', item['name']
-            print 'Apply Here: ', item['website'] + '\n'
-
-remotebasecall()
 
 #Stack RSS Function
 def stackrssjobs():
@@ -87,3 +77,28 @@ def weworkjobs():
                 print "Apply Here: ", post.link + "\n"
 
 weworkjobs()
+
+#Stack RSS Function
+def indeedrssjobs():
+
+    print "New Remote Jobs from Indeed"
+    print "============================"
+
+    for post in url_indeed.entries:
+        print 'Title: ', post.title
+        print 'Apply Here: ', post.link + '\n'
+
+indeedrssjobs()
+
+#Remote Base Function
+
+def remotebasecall():
+
+    print "Possibilities From RemoteBase"
+    print "================================="
+    for item in remote_base_result['companies']:
+        if item['updated_at'] or item['created_at'] > two_weeks_ago.isoformat():
+            print 'Company Name:', item['name']
+            print 'Apply Here: ', item['website'] + '\n'
+
+remotebasecall()
