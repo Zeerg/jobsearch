@@ -11,19 +11,23 @@ today = dt.date.today()
 two_weeks_ago = today - dt.timedelta(days=14)
 
 #URL Dict
+#Need to seperate this out for loop
 url = {'remoteok': "https://remoteok.io/index.json?description=&location=Remote&tags=sys%20admin",
        'stackrss': "http://stackoverflow.com/jobs/feed?r=True&tl=sysadmin+",
        'weworkremotely': "https://weworkremotely.com/categories/6-devops-sysadmin/jobs.rss",
        'remotebase': "http://api.remotebase.io/companies?is_hiring=true&hiring_regions=United%20States",
        'indeed': "http://rss.indeed.com/rss?q=Linux&l=Remote&sort=date",
+       'usajobs': "https://api.usa.gov/jobs/search.json?query=it+jobs+in+wichita+ks",
        }
+
 #remoteok api
-open_remote_ok = urllib2.urlopen(url['remoteok'])
-remote_ok_result = json.load(open_remote_ok)
+remote_ok_result = json.load(urllib2.urlopen(url['remoteok']))
 
 #remote base api
-open_remote_base = urllib2.urlopen(url['remotebase'])
-remote_base_result = json.load(open_remote_base)
+remote_base_result = json.load(urllib2.urlopen(url['remotebase']))
+
+#wichita KS jobs
+open_usa_result = json.load(urllib2.urlopen(url['usajobs']))
 
 #stackrss
 url_stack = feedparser.parse(url['stackrss'])
@@ -46,6 +50,18 @@ def remoteokcall():
             print 'Apply Here: ', item['url'] + '\n'
 
 remoteokcall()
+
+def usajobsreturn():
+
+    print "Wichita Jobs USA Jobs"
+    print "============================"
+    for item in open_usa_result:
+        print 'Company Name:', item['organization_name']
+        print 'Title:', item['position_title']
+        print 'End Date: ', item['end_date']
+        print 'Apply Here: ', item['url'] + '\n'
+
+usajobsreturn()
 
 #Stack RSS Function
 def stackrssjobs():
