@@ -41,7 +41,7 @@ url_indeed = feedparser.parse(url['indeed'])
 #Remote Ok Function
 def remoteokcall():
 
-    print "New Remote Jobs from Remoteok.io"
+    print "New Remote Jobs from Remoteok.ios"
     print "============================"
     for item in remote_ok_result:
         if item['date'] > two_weeks_ago.isoformat():
