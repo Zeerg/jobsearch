@@ -12,7 +12,7 @@ two_weeks_ago = today - dt.timedelta(days=14)
 
 #URL Dict
 #Need to seperate this out for loop
-url = {'remoteok': "https://remoteok.io/index.json?description=&location=Remote&tags=sys%20admin",
+url = {'remoteok': "https://remoteok.io/remote-jobs.json",
        'stackrss': "http://stackoverflow.com/jobs/feed?r=True&tl=sysadmin+",
        'weworkremotely': "https://weworkremotely.com/categories/6-devops-sysadmin/jobs.rss",
        'remotebase': "http://api.remotebase.io/companies?is_hiring=true&hiring_regions=United%20States",
