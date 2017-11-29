@@ -16,7 +16,7 @@ url = {
     'remotebase': "http://api.remotebase.io/companies?fully_remote=true&hiring_regions=Worldwide",
     'indeedAutomation': "http://rss.indeed.com/rss?q=automation&l=Remote&sort=date",
     'indeedSecurity': "https://www.indeed.com/jobs?q=devops+OR+security&l=Remote&sort=date",
-    'usajobs': "https://api.usa.gov/jobs/search.json?query=it+jobs+in+nj"
+    'usajobs': "https://api.usa.gov/jobs/search.json?query=it+jobs+in+ks"
 }
 two_weeks_ago = today - dt.timedelta(days=17)
 maxdesc = 900  # how many characters to print of the description
@@ -37,20 +37,19 @@ start = 0
 def remoteokcall():  # Remote Ok Function
     print("Remote Jobs from Remoteok.io")
     print("============================")
+    remoteokjobs = []
     for item in remote_ok_result:
         if item['date'] > two_weeks_ago.isoformat():
-            print('Company Name:', item['company'])
-            print('Title:', item['position'])
-            print('Post date:', item['date'][:10])
+            remoteokjobs.append(item['company'])
+            remoteokjobs.append(item['position'])
             keyw = str(item['tags'])
-            print('Keywords:', keyw.replace("'", ""))
+            remoteokjobs.append(keyw.replace("'", ""))
             desc = str(item['description'])
             soup = bs(desc, 'html.parser')
-            print('\n')
-            print('Description:', soup.get_text()[start:start+maxdesc] + '\n')
-            print('Apply Here:', item['url'])
-            print('\n')
-            print('##########')
+            remoteokjobs.append(soup.get_text()[start:start+maxdesc])
+            remoteokjobs.append(item['url'])
+    # print(remoteokjobs)
+    return remoteokjobs
 
 
 def stackdevopsjobs():  # Stack RSS Function
@@ -161,21 +160,3 @@ def remotebasecall():  # Remote Base Function
             print('Apply Here: ', item['job_page'])
             print('\n')
             print('##########')
-
-if __name__ == "__main__":
-    print("RemoteOK jobs" + '\n')
-    remoteokcall()
-    print("Stack jobs" + '\n')
-    stackdevopsjobs()
-    print("Stack security jobs" + '\n')
-    stacksecurityjobs()
-    print('Wework jobs' + '\n')
-    weworkjobs()
-    print('Indeed automation jobs' + '\n')
-    indeedrssjobs()
-    print('Indeed security jobs' + '\n')
-    indeedsecuirtyjobs()
-    print('Remotebase' + '\n')
-    remotebasecall()
-
-
