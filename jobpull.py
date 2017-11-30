@@ -71,17 +71,21 @@ def stackdevopsjobs():  # Stack RSS Function
 def stacksecurityjobs():  # Stack RSS Function
     print("Remote Security Jobs from Stack Overflow")
     print("============================")
+    stacksecurityjobslist = []
     for post in url_stack_sec.entries:
         if post.date > two_weeks_ago.isoformat():
-            print('Title: ', post.title)
-            print('Post date: ', post.date[:10])
-            print('\n')
+            # print('Title: ', post.title)
+            stacksecurityjobslist.append(post.title)
+            # print('Post date: ', post.date[:10])
+            stacksecurityjobslist.append(post.date[:10])
             desc = str(post.description)
             soup = bs(desc, 'html.parser')
-            print('Description: ', soup.get_text()[start:start+maxdesc] + '\n')
-            print('Apply Here: ', post.link)
-            print('\n')
-            print('##########')
+            # print('Description: ', soup.get_text()[start:start+maxdesc] + '\n')
+            stacksecurityjobslist.append(soup.get_text()[start:start+maxdesc])
+            # print('Apply Here: ', post.link)
+            stacksecurityjobslist.append(post.link)
+    print(stacksecurityjobslist)
+    return stacksecurityjobslist
 
 
 def weworkjobs():
