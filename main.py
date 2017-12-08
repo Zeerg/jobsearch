@@ -1,22 +1,7 @@
 import jobpull
 
-
 if __name__ == "__main__":
-    with open('output.html', 'w') as myFile:
-        myFile.write('<html>')
-        myFile.write('<body>')
-        myFile.write('<table>')
-
-        for i in jobpull.remoteokcall():
-            myFile.write('<tr>')
-            myFile.write('<td>%s</td>' % i.encode('ascii', 'ignore').decode('ascii'))
-            myFile.write('</tr>')
-
-        for i in jobpull.stacksecurityjobs():
-            myFile.write('<tr>')
-            myFile.write('<td>%s</td>' % i.encode('ascii', 'ignore').decode('ascii'))
-            myFile.write('</tr>')
-
-        myFile.write('</table>')
-        myFile.write('</body>')
-        myFile.write('</html>')
+    jobpull.clean_html()
+    jobpull.json_build(jobpull.remote_ok_result)
+    jobpull.json_build_rb(jobpull.remotebase_result)
+    jobpull.close_html()
