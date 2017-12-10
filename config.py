@@ -12,3 +12,5 @@ rssfeeds = {
     'indeedAutomation': "http://rss.indeed.com/rss?q=automation&l=Remote&sort=date",
     'indeedSecurity': "https://www.indeed.com/jobs?q=devops+OR+security&l=Remote&sort=date",
 }
+
+dojobs = 'https://www.digitalocean.com/company/careers/'

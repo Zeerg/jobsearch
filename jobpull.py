@@ -1,24 +1,19 @@
 #!/usr/bin/env python
 import json
 import urllib.request as request
-import feedparser
+import feedparser as fp
 import datetime as dt
+import config as cfg
+import nltk
 from json2html import *
 from bs4 import BeautifulSoup as bs
-import config as cfg
+
+
+stopwords = nltk.corpus.stopwords.words('english')
 today = dt.date.today()
-
-############################################
-# user defined vars
-
 two_weeks_ago = today - dt.timedelta(days=17)
 start = 0
-############################################
-# do not modify below
 
-
-#############################################
-######### Json Dump All Da Data ##############
 
 
 def json_url_load(api_url):
@@ -46,7 +41,6 @@ def clean_html():
 
 
 def html_builder(result_write, placement):
-
     with open('output.html', 'a') as myFile:
         if placement == "text":
             myFile.write("Apply Here: ")
@@ -57,15 +51,26 @@ def html_builder(result_write, placement):
             myFile.write(result_write)
             myFile.write('</br>')
             myFile.close()
+        if placement == "nltk":
+            myFile.write("Most Common Words: ")
+            myFile.write(json2html.convert(result_write).encode('ascii', 'ignore').decode('ascii'))
+            myFile.write('</br>')
+            myFile.close()
 
 
 def json_build(url_input):
     html_builder("<h3>Jobs From RemoteOk</h3>", "html")
     for item in url_input:
         if item['date'] > two_weeks_ago.isoformat():
+            allwords = nltk.tokenize.word_tokenize(item['description'])
+            allWordDist = nltk.FreqDist(w.lower() for w in allwords)
+            stopwords = nltk.corpus.stopwords.words('english')
+            allWordExceptStopDist = nltk.FreqDist(w.lower() for w in allwords if w not in stopwords)
+            mostCommon = str(allWordExceptStopDist.most_common(10))
             html_builder(item['company'], "html")
             html_builder(item['position'], "html")
             html_builder(item['url'], "text")
+            html_builder(mostCommon, "nltk")
 
 
 def json_build_rb(url_input):
