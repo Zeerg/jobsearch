@@ -13,4 +13,13 @@ rssfeeds = {
     'indeedSecurity': "https://www.indeed.com/jobs?q=devops+OR+security&l=Remote&sort=date",
 }
 
-dojobs = 'https://www.digitalocean.com/company/careers/'
+digitalocean_jobs = 'https://www.digitalocean.com/company/careers/'
+ninja_jobs = 'https://ninjajobs.org/listings/search?remote_work_select=%2Cremote_full'
+
+### Enter Number Of Days To Search.
+
+days = 14
+
+#### Resume location #### Docx format only currently
+
+resume = '/Users/snuggy/Desktop/ThomasEBowyer.docx'

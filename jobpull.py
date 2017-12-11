@@ -1,19 +1,14 @@
 #!/usr/bin/env python
+import config as cfg
+import datetime as dt
 import json
 import urllib.request as request
-import feedparser as fp
-import datetime as dt
-import config as cfg
-import nltk
 from json2html import *
-from bs4 import BeautifulSoup as bs
+from nlproc import *
 
 
-stopwords = nltk.corpus.stopwords.words('english')
 today = dt.date.today()
-two_weeks_ago = today - dt.timedelta(days=17)
-start = 0
-
+two_weeks_ago = today - dt.timedelta(days=cfg.days)
 
 
 def json_url_load(api_url):
@@ -56,21 +51,22 @@ def html_builder(result_write, placement):
             myFile.write(json2html.convert(result_write).encode('ascii', 'ignore').decode('ascii'))
             myFile.write('</br>')
             myFile.close()
+        if placement == "resume":
+            myFile.write("<h3>Current Resume Keywords</h3>")
+            myFile.write(result_write)
+            myFile.write('</br>')
+            myFile.close()
 
 
 def json_build(url_input):
     html_builder("<h3>Jobs From RemoteOk</h3>", "html")
     for item in url_input:
         if item['date'] > two_weeks_ago.isoformat():
-            allwords = nltk.tokenize.word_tokenize(item['description'])
-            allWordDist = nltk.FreqDist(w.lower() for w in allwords)
-            stopwords = nltk.corpus.stopwords.words('english')
-            allWordExceptStopDist = nltk.FreqDist(w.lower() for w in allwords if w not in stopwords)
-            mostCommon = str(allWordExceptStopDist.most_common(10))
             html_builder(item['company'], "html")
             html_builder(item['position'], "html")
             html_builder(item['url'], "text")
-            html_builder(mostCommon, "nltk")
+            most_common = nlproc(item['description'])
+            html_builder(most_common, "nltk")
 
 
 def json_build_rb(url_input):
@@ -78,6 +74,11 @@ def json_build_rb(url_input):
     for item in url_input['companies']:
         if item['updated_at'] or item['created_at'] > two_weeks_ago.isoformat():
             html_builder(item['website'], "text")
+
+def resume_builder():
+    resume_dump = resume_parser(cfg.resume)
+    most_common_resume = nlproc(resume_dump)
+    html_builder(most_common_resume, "resume")
 
 def close_html():
     with open('output.html', 'a') as newpull:
