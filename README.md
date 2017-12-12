@@ -1,3 +1,4 @@
-Fire and Forgot python scripts to help me find a job
+Work in progress Python to scrape some job sites and use nltk and bs4 to filter out results. It then outputs to an html file.
 
-Needs Python 3, feedparser, and bs4
+Install with the requirments.txt and run with main.py 
+

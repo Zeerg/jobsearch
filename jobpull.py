@@ -1,181 +1,92 @@
 #!/usr/bin/env python
+import config as cfg
+import datetime as dt
 import json
 import urllib.request as request
-import feedparser
-import datetime as dt
-from bs4 import BeautifulSoup as bs
+from json2html import *
+from nlproc import *
+
+
 today = dt.date.today()
-
-############################################
-# user defined vars
-url = {
-    'remoteok': 'https://remoteok.io/remote-jobs.json',
-    'stackDevops': "https://stackoverflow.com/jobs/feed?tl=devops+automation+puppet+python+",
-    'stackSecurity': "https://stackoverflow.com/jobs/feed?tl=security+soc+",
-    'weworkremotely': "https://weworkremotely.com/categories/6-devops-sysadmin/jobs.rss",
-    'remotebase': "http://api.remotebase.io/companies?fully_remote=true&hiring_regions=Worldwide",
-    'indeedAutomation': "http://rss.indeed.com/rss?q=automation&l=Remote&sort=date",
-    'indeedSecurity': "https://www.indeed.com/jobs?q=devops+OR+security&l=Remote&sort=date",
-    'usajobs': "https://api.usa.gov/jobs/search.json?query=it+jobs+in+nj"
-}
-two_weeks_ago = today - dt.timedelta(days=17)
-maxdesc = 900  # how many characters to print of the description
-############################################
-# do not modify below
-
-remote_ok_result = json.load(request.urlopen(url['remoteok']))
-url_stack = feedparser.parse(url['stackDevops'])
-url_stack_sec = feedparser.parse(url['stackSecurity'])
-url_wework = feedparser.parse(url['weworkremotely'])
-open_usa_result = json.load(request.urlopen(url['usajobs']))
-remote_base_result = json.load(request.urlopen(url['remotebase']))
-url_indeed = feedparser.parse(url['indeedAutomation'])
-url_indeed_sec = feedparser.parse(url['indeedSecurity'])
-start = 0
+two_weeks_ago = today - dt.timedelta(days=cfg.days)
 
 
-def remoteokcall():  # Remote Ok Function
-    print("Remote Jobs from Remoteok.io")
-    print("============================")
-    for item in remote_ok_result:
-        if item['date'] > two_weeks_ago.isoformat():
-            print('Company Name:', item['company'])
-            print('Title:', item['position'])
-            print('Post date:', item['date'][:10])
-            keyw = str(item['tags'])
-            print('Keywords:', keyw.replace("'", ""))
-            desc = str(item['description'])
-            soup = bs(desc, 'html.parser')
-            print('\n')
-            print('Description:', soup.get_text()[start:start+maxdesc] + '\n')
-            print('Apply Here:', item['url'])
-            print('\n')
-            print('##########')
+def json_url_load(api_url):
+    json_output = json.load(request.urlopen(api_url))
+    return json_output
 
 
-def stackdevopsjobs():  # Stack RSS Function
-    print('Remote Devops Jobs from Stack Overflow')
-    print("============================")
-    for post in url_stack.entries:
-        if post.date > two_weeks_ago.isoformat():
-            print('Title: ', post.title)
-            print('Post date: ', post.date[:10])
-            print('\n')
-            desc = str(post.description)
-            soup = bs(desc, 'html.parser')
-            print('Description: ', soup.get_text()[start:start+maxdesc] + '\n')
-            print('Apply Here: ', post.link)
-            print('\n')
-            print('##########')
+remote_ok_result = json_url_load(cfg.jsonfeeds['remoteok'])
+remotebase_result = json_url_load(cfg.jsonfeeds['remotebase'])
+
+#############################################
+#############################################
 
 
-def stacksecurityjobs():  # Stack RSS Function
-    print("Remote Security Jobs from Stack Overflow")
-    print("============================")
-    for post in url_stack_sec.entries:
-        if post.date > two_weeks_ago.isoformat():
-            print('Title: ', post.title)
-            print('Post date: ', post.date[:10])
-            print('\n')
-            desc = str(post.description)
-            soup = bs(desc, 'html.parser')
-            print('Description: ', soup.get_text()[start:start+maxdesc] + '\n')
-            print('Apply Here: ', post.link)
-            print('\n')
-            print('##########')
+def clean_html():
+    with open('output.html', 'w') as newpull:
+        newpull.write("<!doctype html>")
+        newpull.write('<html lang = "en">')
+        newpull.write("<head>")
+        newpull.write('<meta charset = "utf-8">')
+        newpull.write("<title > Find Da Job</title>")
+        newpull.write("</head>")
+        newpull.write("<body>")
+        newpull.close()
 
 
-def weworkjobs():
-    print("We Work Remotley Jobs")
-    print("========================")
-    for post in url_wework.entries:
-        if post.published > two_weeks_ago.isoformat():
-            print('Title: ', post.title)
-            print('Post date: ', post.published[:17])
-            print('\n')
-            desc = str(post.description)
-            soup = bs(desc, 'html.parser')
-            print('Description: ', soup.get_text()[start:start+maxdesc] + '\n')
-            print('Apply Here: ', post.link)
-            print('\n')
-            print('##########')
+def html_builder(result_write, placement):
+    with open('output.html', 'a') as myFile:
+        if placement == "text":
+            myFile.write("Apply Here: ")
+            myFile.write(json2html.convert(result_write).encode('ascii', 'ignore').decode('ascii'))
+            myFile.write('</br>')
+            myFile.close()
+        if placement == "html":
+            myFile.write(result_write)
+            myFile.write('</br>')
+            myFile.close()
+        if placement == "nltk":
+            myFile.write("Most Common Words: ")
+            myFile.write(json2html.convert(result_write).encode('ascii', 'ignore').decode('ascii'))
+            myFile.write('</br>')
+            myFile.write('</br>')
+            myFile.close()
+        if placement == "resume":
+            myFile.write("<h3>Current Resume Keywords</h3>")
+            myFile.write(result_write)
+            myFile.write('</br>')
+            myFile.close()
 
 
-def usajobsreturn():  # USA jobs Function
-    print("Wichita Jobs USA Jobs")
-    print("============================")
-    for item in open_usa_result:
-        print('Company Name:', item['organization_name'])
-        print('Title:', item['position_title'])
-        print('\n')
-        desc = str(item['description'])
-        soup = bs(desc, 'html.parser')
-        print('Description:', soup.get_text()[start:start + maxdesc] + '\n')
-        print('End Date: ', item['end_date'])
-        print('Apply Here: ', item['url'])
-        print('\n')
-        print('##########')
+def json_build(url_input, api_name):
+    if api_name == "remoteok":
+        html_builder("<h3>Jobs from Json APIs</h3>", "html")
+        for item in url_input:
+            if item['date'] > two_weeks_ago.isoformat():
+                html_builder(item['company'], "html")
+                html_builder(item['position'], "html")
+                html_builder(item['url'], "text")
+                most_common = nlproc(item['description'])
+                html_builder(most_common, "nltk")
+    if api_name == "remotebase":
+        for item in url_input['jobs']:
+            if item['created_at'] or item['update_at'] > two_weeks_ago.isoformat():
+                html_builder(item['company']['name'], "html")
+                html_builder(item['title'], "html")
+                html_builder(item['url'], "text")
+                most_common = nlproc(item['description'])
+                html_builder(most_common, "nltk")
 
 
-def indeedrssjobs():  # indeed RSS Function
-    print("Remote devops Jobs from Indeed")
-    print("============================")
-    for post in url_indeed.entries:
-        print('Title: ', post.title)
-        print('Post date: ', post.published[:17])
-        print('\n')
-        desc = str(post.description)
-        soup = bs(desc, 'html.parser')
-        print('Description: ', soup.get_text()[start:start + maxdesc] + '\n')
-        print('Apply Here: ', post.link)
-        print('\n')
-        print('##########')
+def resume_builder():
+    resume_dump = resume_parser(cfg.resume)
+    most_common_resume = nlproc(resume_dump)
+    html_builder(most_common_resume, "resume")
 
 
-def indeedsecuirtyjobs():  # indeed RSS Function
-    print("Remote Security Jobs from Indeed")
-    print("============================")
-    for post in url_indeed_sec .entries:
-        print('Title: ', post.title)
-        print('Post date: ', post.published[:17])
-        print('\n')
-        desc = str(post.description)
-        soup = bs(desc, 'html.parser')
-        print('Description: ', soup.get_text()[start:start + maxdesc] + '\n')
-        print('Apply Here: ', post.link)
-        print('\n')
-        print('##########')
-
-
-def remotebasecall():  # Remote Base Function
-    print("Jobs From RemoteBase")
-    print("=================================")
-    for item in remote_base_result['companies']:
-        if item['updated_at'] or item['created_at'] > two_weeks_ago.isoformat():
-            print('Company Name:', item['name'])
-            print('Job function:', item['short_description'])
-            print('\n')
-            desc = str(item['description'])
-            soup = bs(desc, 'html.parser')
-            print('Description:', soup.get_text()[start:start + maxdesc] + '\n')
-            print('Apply Here: ', item['job_page'])
-            print('\n')
-            print('##########')
-
-if __name__ == "__main__":
-    print("RemoteOK jobs" + '\n')
-    remoteokcall()
-    print("Stack jobs" + '\n')
-    stackdevopsjobs()
-    print("Stack security jobs" + '\n')
-    stacksecurityjobs()
-    print('Wework jobs' + '\n')
-    weworkjobs()
-    print('Indeed automation jobs' + '\n')
-    indeedrssjobs()
-    print('Indeed security jobs' + '\n')
-    indeedsecuirtyjobs()
-    print('Remotebase' + '\n')
-    remotebasecall()
-
-
+def close_html():
+    with open('output.html', 'a') as newpull:
+        newpull.write("</body>")
+        newpull.write("</html>")
+        newpull.close()
