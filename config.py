@@ -1,7 +1,7 @@
 ### Place Json Feeds in here.
 jsonfeeds = {
     'remoteok': "https://remoteok.io/remote-infosec-jobs.json",
-    'remotebase': "http://api.remotebase.io/companies?fully_remote=true&hiring_regions=Worldwide",
+    'remotebase': "http://api.remotebase.io/jobs",
     'usajobs': "https://data.usajobs.gov/jobs/search.json?query=it+jobs+in+ks"
 }
 ### Place RSS Feeds in here.

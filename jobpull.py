@@ -50,6 +50,7 @@ def html_builder(result_write, placement):
             myFile.write("Most Common Words: ")
             myFile.write(json2html.convert(result_write).encode('ascii', 'ignore').decode('ascii'))
             myFile.write('</br>')
+            myFile.write('</br>')
             myFile.close()
         if placement == "resume":
             myFile.write("<h3>Current Resume Keywords</h3>")
@@ -58,27 +59,31 @@ def html_builder(result_write, placement):
             myFile.close()
 
 
-def json_build(url_input):
-    html_builder("<h3>Jobs From RemoteOk</h3>", "html")
-    for item in url_input:
-        if item['date'] > two_weeks_ago.isoformat():
-            html_builder(item['company'], "html")
-            html_builder(item['position'], "html")
-            html_builder(item['url'], "text")
-            most_common = nlproc(item['description'])
-            html_builder(most_common, "nltk")
+def json_build(url_input, api_name):
+    if api_name == "remoteok":
+        html_builder("<h3>Jobs from Json APIs</h3>", "html")
+        for item in url_input:
+            if item['date'] > two_weeks_ago.isoformat():
+                html_builder(item['company'], "html")
+                html_builder(item['position'], "html")
+                html_builder(item['url'], "text")
+                most_common = nlproc(item['description'])
+                html_builder(most_common, "nltk")
+    if api_name == "remotebase":
+        for item in url_input['jobs']:
+            if item['created_at'] or item['update_at'] > two_weeks_ago.isoformat():
+                html_builder(item['company']['name'], "html")
+                html_builder(item['title'], "html")
+                html_builder(item['url'], "text")
+                most_common = nlproc(item['description'])
+                html_builder(most_common, "nltk")
 
-
-def json_build_rb(url_input):
-    html_builder("<h3>Compaines From Remote Base</h3>", "html")
-    for item in url_input['companies']:
-        if item['updated_at'] or item['created_at'] > two_weeks_ago.isoformat():
-            html_builder(item['website'], "text")
 
 def resume_builder():
     resume_dump = resume_parser(cfg.resume)
     most_common_resume = nlproc(resume_dump)
     html_builder(most_common_resume, "resume")
+
 
 def close_html():
     with open('output.html', 'a') as newpull:
