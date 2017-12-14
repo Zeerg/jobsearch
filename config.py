@@ -22,4 +22,4 @@ days = 14
 
 #### Resume location #### Docx format only currently
 
-resume = '/Users/snuggy/Desktop/ThomasEBowyer.docx'
+resume = ''
