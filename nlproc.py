@@ -13,7 +13,7 @@ def nlproc(nl_input):
     clean_text = soup.get_text().translate(tbl)
     allwords = nltk.tokenize.word_tokenize(clean_text)
     allWordExceptStopDist = nltk.FreqDist(w.lower() for w in allwords if w not in stopwords)
-    most_common = str(allWordExceptStopDist.most_common(5))
+    most_common = allWordExceptStopDist.most_common(10)
     return most_common
 
 def resume_parser(resume_input):

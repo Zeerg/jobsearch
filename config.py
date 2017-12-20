@@ -20,6 +20,14 @@ ninja_jobs = 'https://ninjajobs.org/listings/search?remote_work_select=%2Cremote
 
 days = 14
 
+#### Output file location
+
+html_output = '/Users/snuggy/Desktop/jobs.html'
+
 #### Resume location #### Docx format only currently
 
-resume = ''
+resume = '/Users/snuggy/Desktop/ThomasEBowyer.docx'
+
+### Keywords to Search
+
+job_keywords= []
