@@ -14,11 +14,12 @@ rssfeeds = {
 }
 
 digitalocean_jobs = 'https://www.digitalocean.com/company/careers/'
-ninja_jobs = 'https://ninjajobs.org/listings/search?remote_work_select=%2Cremote_full'
+
+#Ninja Jobs Config
 
 ### Enter Number Of Days To Search.
 
-days = 14
+days = 17
 
 #### Output file location
 

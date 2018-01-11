@@ -20,7 +20,7 @@ def html_builder(result_write, placement):
             myFile.write(json2html.convert(result_write).encode('ascii', 'ignore').decode('ascii'))
             myFile.write('</br>')
             myFile.close()
-        if placement == "html":
+        elif placement == "html":
             try:
                 myFile.write(result_write)
                 myFile.write('</br>')
@@ -29,14 +29,19 @@ def html_builder(result_write, placement):
                 myFile.write(json2html.convert(result_write).encode('ascii', 'ignore').decode('ascii'))
                 myFile.write('</br>')
                 myFile.close()
-
-        if placement == "nltk":
+        elif placement == "nltk":
             myFile.write("Most Common Words: ")
             myFile.write(json2html.convert(result_write).encode('ascii', 'ignore').decode('ascii'))
             myFile.write('</br>')
             myFile.write('</br>')
             myFile.close()
-        if placement == "resume":
+        elif placement == "resume":
+            myFile.write("<h3>Current Resume Keywords</h3>")
+            myFile.write(result_write)
+            myFile.write('</br>')
+            myFile.close()
+        else:
+            print("Using Defaut placement")
             myFile.write("<h3>Current Resume Keywords</h3>")
             myFile.write(result_write)
             myFile.write('</br>')

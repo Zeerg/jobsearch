@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-import config as cfg
 import datetime as dt
 import json
 import urllib.request as request
-from nlproc import *
+from nlproc import nlproc,resume_parser
 from html_builder import *
+
 
 
 today = dt.date.today()
@@ -21,7 +21,6 @@ remotebase_result = json_url_load(cfg.jsonfeeds['remotebase'])
 
 #############################################
 #############################################
-
 
 
 def json_build(url_input, api_name):
@@ -48,5 +47,4 @@ def resume_builder():
     resume_dump = resume_parser(cfg.resume)
     most_common_resume = nlproc(resume_dump)
     html_builder(str(most_common_resume), "resume")
-
 
