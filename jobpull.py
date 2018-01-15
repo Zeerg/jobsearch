@@ -2,8 +2,9 @@
 import datetime as dt
 import json
 import urllib.request as request
-from nlproc import nlproc,resume_parser
-from html_builder import *
+from modules.nlproc import nlproc,resume_parser
+from modules.google import google
+from modules.html_builder import *
 
 
 
@@ -18,11 +19,11 @@ def json_url_load(api_url):
 
 remote_ok_result = json_url_load(cfg.jsonfeeds['remoteok'])
 remotebase_result = json_url_load(cfg.jsonfeeds['remotebase'])
-
+most_common_resume = []
 #############################################
 #############################################
 
-
+#need to loop this for all json feeds.
 def json_build(url_input, api_name):
     if api_name == "remoteok":
         html_builder("<h3>Jobs from Json APIs</h3>", "html")
@@ -48,3 +49,17 @@ def resume_builder():
     most_common_resume = nlproc(resume_dump)
     html_builder(str(most_common_resume), "resume")
 
+
+def google_result():
+    html_builder("<h3>Jobs From Google Dorks</h3>", "html")
+    for item in google():
+        html_builder(str(item), "text")
+
+
+if __name__ == "__main__":
+    clean_html()
+    resume_builder()
+    json_build(remote_ok_result, "remoteok")
+    json_build(remotebase_result, "remotebase")
+    google_result()
+    close_html()
