@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from string import punctuation
 
 
-tbl = str.maketrans({ord(ch):"" for ch in punctuation})
+tbl = str.maketrans({ord(ch): "" for ch in punctuation})
 stopwords = nltk.corpus.stopwords.words('english')
 
 
@@ -15,6 +15,7 @@ def nlproc(nl_input):
     allWordExceptStopDist = nltk.FreqDist(w.lower() for w in allwords if w not in stopwords)
     most_common = allWordExceptStopDist.most_common(10)
     return most_common
+
 
 def resume_parser(resume_input):
     doc = docx.Document(resume_input)

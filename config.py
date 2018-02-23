@@ -1,10 +1,10 @@
-### Place Json Feeds in here.
+# Place Json Feeds in here.
 jsonfeeds = {
     'remoteok': "https://remoteok.io/remote-infosec-jobs.json",
     'remotebase': "http://api.remotebase.io/jobs",
     'usajobs': "https://data.usajobs.gov/jobs/search.json?query=it+jobs+in+ks"
 }
-### Place RSS Feeds in here.
+# Place RSS Feeds in here.
 rssfeeds = {
     'stackDevops': "https://stackoverflow.com/jobs/feed?tl=devops+automation+puppet+python+",
     'stackSecurity': "https://stackoverflow.com/jobs/feed?tl=security+soc+",
@@ -15,20 +15,20 @@ rssfeeds = {
 
 digitalocean_jobs = 'https://www.digitalocean.com/company/careers/'
 
-#Ninja Jobs Config
+# Ninja Jobs Config
 
-### Enter Number Of Days To Search.
+# Enter Number Of Days To Search.
 
 days = 17
 
-#### Output file location
+# Output file location
 
 html_output = '/Users/snuggy/Desktop/jobs.html'
 
-#### Resume location #### Docx format only currently
+# Resume location #### Docx format only currently
 
 resume = '/Users/snuggy/Desktop/ThomasEBowyer.docx'
 
-### Keywords to Search
+# Keywords to Search
 
-job_keywords= []
+job_keywords = []

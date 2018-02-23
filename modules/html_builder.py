@@ -1,5 +1,6 @@
-from json2html import *
+from json2html import json2html
 import config as cfg
+
 
 def clean_html():
     with open(cfg.html_output, 'w') as newpull:

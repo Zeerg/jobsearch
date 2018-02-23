@@ -3,3 +3,4 @@ python_docx==0.8.6
 json2html==1.2.1
 nltk==3.2.4
 beautifulsoup4==4.6.0
+selenium
