@@ -23,10 +23,10 @@ def google():
         for elem in links:
             link = elem.get_attribute("href")
             links_list.append(link)
-        """browser.get('http://www.google.com/search?q=' + dorks[i] + "&t=h_&ia=web&start=10")
-        for elem in links:
-            link = elem.get_attribute("href")
-            links_list.append(link)
-        """
+        #
+        # browser.get('http://www.google.com/search?q=' + dorks[i] + "&t=h_&ia=web&start=10")
+        # for elem in links:
+        #     link = elem.get_attribute("href")
+        #    links_list.append(link)
     browser.quit()
     return links_list
